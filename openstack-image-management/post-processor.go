@@ -111,7 +111,7 @@ func (p *OpenStackPostProcessor) PostProcess(ctx context.Context, ui packer.Ui, 
 		}
 
 		ui.Message(fmt.Sprintf("Deleting image: %s", img.ID))
-		log.Printf("Deteting image (%s)", img.ID)
+		log.Printf("Deleting image (%s)", img.ID)
 		if result := images.Delete(p.conn, img.ID); result.Err != nil {
 			return nil, true, false, result.Err
 		}
