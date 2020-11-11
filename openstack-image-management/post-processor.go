@@ -97,6 +97,16 @@ func (p *OpenStackPostProcessor) PostProcess(ctx context.Context, ui packer.Ui, 
 
 	for i, img := range imageList {
 		if i < p.config.KeepReleases {
+			ui.Message(fmt.Sprintf("Updating meta for image: %s", img.ID))
+			updateOpts := images.UpdateOpts{
+				images.UpdateImageProperty{
+					Op:   images.RemoveOp,
+					Name: "signature_verified",
+				},
+			}
+			if result := images.Update(p.conn, img.ID, updateOpts); result.Err != nil {
+				return nil, true, false, result.Err
+			}
 			continue
 		}
 
