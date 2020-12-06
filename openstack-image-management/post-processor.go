@@ -77,6 +77,13 @@ func (p *OpenStackPostProcessor) PostProcess(ctx context.Context, ui packer.Ui, 
 
 	var imageList []images.Image
 
+	if len(p.config.Identifier) == 0 {
+		//assert non empty Identifier string
+		//to avoid accidental cleanup
+		failure := fmt.Errorf("Empty identifier string in plugin configuration.")
+		return nil, true, false, failure
+	}
+
 	log.Println("Describing images for generation management")
 	pager := images.List(p.conn, images.ListOpts{Name: p.config.Identifier})
 	if err := pager.EachPage(func(page pagination.Page) (bool, error) {
